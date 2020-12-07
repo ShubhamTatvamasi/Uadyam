@@ -1,5 +1,7 @@
 # Uadyam
 
+### Docker
+
 creating new image from Dockerfile
 ```bash
 docker build -t shubhamtatvamasi/private:uadyam .
@@ -18,28 +20,6 @@ docker run --rm -it -p 80:5000 \
   --entrypoint bash \
   shubhamtatvamasi/private:uadyam
 ```
-
-download library
-```bash
-python -c "import nltk;nltk.download('stopwords')"
-python -m spacy download en
-```
-
-  >>> import nltk
-  >>> nltk.download('stopwords')
-  
-python -m spacy download en_core_web_lg
-python -m spacy download en
-
-
-python3.8 -c "print('Real Python');print('Real Python')"
-
-
-
-python3.8 -c 'print("Real Python")\nprint("Real Python")\n'
-
-python3.8 -c 'for i in range(10): print "foo"; print "bar"'
-
 
 ### Kubernetes
 
