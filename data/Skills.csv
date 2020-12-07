@@ -1,0 +1,359 @@
+sector,ind,skills
+software,is_skill,.net
+software,is_skill,3d max
+software,is_skill,abap
+software,is_skill,abinitio
+software,is_skill,active directory
+software,is_skill,activex
+software,is_skill,adobe illustrator
+software,is_skill,adobe pagemaker
+software,is_skill,adobe photoshop
+software,is_skill,affiliate marketing
+software,is_skill,android development
+software,is_skill,angular
+software,is_skill,ansys
+software,is_skill,apache commons
+software,is_skill,apache tomcat
+software,is_skill,apache web server
+software,is_skill,archicad
+software,is_skill,as 400
+software,is_skill,asic
+software,is_skill,asp
+software,is_skill,asp.net
+software,is_skill,assembly language
+software,is_skill,auto cad
+software,is_skill,autolisp
+software,is_skill,automation testing
+software,is_skill,autosys
+software,is_skill,aws
+software,is_skill,azure
+software,is_skill,back office
+software,is_skill,back office operations
+software,is_skill,backend
+software,is_skill,blackberry
+software,is_skill,block chain
+software,is_skill,bluetooth
+software,is_skill,bpcs
+software,is_skill,bpel
+software,is_skill,brew
+software,is_skill,business objects
+software,is_skill,c#
+software,is_skill,c++
+software,is_skill,cad/cam
+software,is_skill,call center
+software,is_skill,calypso
+software,is_skill,catia
+software,is_skill,ccie
+software,is_skill,cdma
+software,is_skill,chordiant
+software,is_skill,cics
+software,is_skill,cisco
+software,is_skill,cldc
+software,is_skill,clipper
+software,is_skill,cloud
+software,is_skill,cobol
+software,is_skill,cognos
+software,is_skill,coldfusion
+software,is_skill,com/com+/dcom
+software,is_skill,corba
+software,is_skill,core java
+software,is_skill,corejava
+software,is_skill,corel draw
+software,is_skill,crm
+software,is_skill,crystal report
+software,is_skill,csharp
+software,is_skill,css
+software,is_skill,data analysis
+software,is_skill,data science
+software,is_skill,data structures
+software,is_skill,data warehousing
+software,is_skill,database
+software,is_skill,database administration
+software,is_skill,datastage
+software,is_skill,datawarehousing
+software,is_skill,db2
+software,is_skill,db4o
+software,is_skill,dbase
+software,is_skill,dcom
+software,is_skill,delphi
+software,is_skill,derby
+software,is_skill,designing
+software,is_skill,developer/d2k
+software,is_skill,dhcp
+software,is_skill,dhtml
+software,is_skill,digital marketing
+software,is_skill,distribution
+software,is_skill,dns
+software,is_skill,documentation
+software,is_skill,documentum
+software,is_skill,dos
+software,is_skill,downstream
+software,is_skill,dreamweaver
+software,is_skill,eclipse
+software,is_skill,editing
+software,is_skill,embedded c
+software,is_skill,erp
+software,is_skill,ethernet
+software,is_skill,excel
+software,is_skill,expeditor
+software,is_skill,filenet
+software,is_skill,finacle
+software,is_skill,finone
+software,is_skill,firewall
+software,is_skill,fireworks
+software,is_skill,flash
+software,is_skill,flashlite
+software,is_skill,flex
+software,is_skill,flexcube
+software,is_skill,focus
+software,is_skill,fortran
+software,is_skill,foxpro
+software,is_skill,fpga
+software,is_skill,freebsd
+software,is_skill,gloss
+software,is_skill,gsm
+software,is_skill,hibernate
+software,is_skill,hp unix
+software,is_skill,html
+software,is_skill,humming bird
+software,is_skill,hyperion
+software,is_skill,ibatis
+software,is_skill,ideas
+software,is_skill,iis
+software,is_skill,imageready
+software,is_skill,impromptu
+software,is_skill,ims
+software,is_skill,informatica
+software,is_skill,informix
+software,is_skill,ingres
+software,is_skill,installshield
+software,is_skill,internet marketing
+software,is_skill,isdn
+software,is_skill,itil
+software,is_skill,j++
+software,is_skill,j2ee
+software,is_skill,j2me
+software,is_skill,j2se
+software,is_skill,java
+software,is_skill,java
+software,is_skill,java2d
+software,is_skill,javacard
+software,is_skill,javafx
+software,is_skill,javascript
+software,is_skill,javase
+software,is_skill,jboss
+software,is_skill,jboss seam
+software,is_skill,jcl
+software,is_skill,jdbc
+software,is_skill,jdom
+software,is_skill,jface
+software,is_skill,jini
+software,is_skill,jira
+software,is_skill,jmock
+software,is_skill,jms
+software,is_skill,jni
+software,is_skill,jquery
+software,is_skill,node js
+software,is_skill,full stack
+software,is_skill,js
+software,is_skill,fullstack
+software,is_skill,jse
+software,is_skill,jsf
+software,is_skill,jsp
+software,is_skill,junit
+software,is_skill,kickboxing
+software,is_skill,ksh
+software,is_skill,linq
+software,is_skill,linux
+software,is_skill,load runner
+software,is_skill,log4j
+software,is_skill,lotus notes
+software,is_skill,lynix
+software,is_skill,mac os
+software,is_skill,machine learning
+software,is_skill,qa
+software,is_skill,mainframe
+software,is_skill,manual testing
+software,is_skill,matlab
+software,is_skill,maven
+software,is_skill,maximo
+software,is_skill,maya
+software,is_skill,mcp
+software,is_skill,mcsa
+software,is_skill,mcse
+software,is_skill,mfc
+software,is_skill,microcontrollers
+software,is_skill,microprocessors
+software,is_skill,microsoft access
+software,is_skill,microsoft excel
+software,is_skill,microsoft exchange
+software,is_skill,microsoft office
+software,is_skill,microstation
+software,is_skill,midp
+software,is_skill,mis reports
+software,is_skill,ml
+software,is_skill,moss
+software,is_skill,motif
+software,is_skill,ms dos
+software,is_skill,ms project
+software,is_skill,ms sql server
+software,is_skill,ms visio
+software,is_skill,mscit
+software,is_skill,multimedia
+software,is_skill,multithreading
+software,is_skill,murex
+software,is_skill,mvs
+software,is_skill,mysql
+software,is_skill,natural adabas
+software,is_skill,netweaver
+software,is_skill,networking
+software,is_skill,nlp
+software,is_skill,node
+software,is_skill,nortel
+software,is_skill,novell
+software,is_skill,odbc
+software,is_skill,office operations
+software,is_skill,online marketing
+software,is_skill,oops
+software,is_skill,opengl es
+software,is_skill,operating systems
+software,is_skill,oracle
+software,is_skill,oracle apps
+software,is_skill,oracle warehouse builder
+software,is_skill,orcad
+software,is_skill,os/2
+software,is_skill,pascal
+software,is_skill,peoplesoft
+software,is_skill,perl
+software,is_skill,photoshop
+software,is_skill,php
+software,is_skill,pl/1
+software,is_skill,pl/sql
+software,is_skill,plc
+software,is_skill,postgresql
+software,is_skill,powerbuilder
+software,is_skill,powerplay
+software,is_skill,ppc
+software,is_skill,primavera
+software,is_skill,pro e
+software,is_skill,pro*c
+software,is_skill,programming
+software,is_skill,progress 4gl
+software,is_skill,pvcs
+software,is_skill,python
+software,is_skill,python
+software,is_skill,qbasic
+software,is_skill,qtp
+software,is_skill,quality assurance/qa
+software,is_skill,react
+software,is_skill,redhat
+software,is_skill,remedy
+software,is_skill,remoting
+software,is_skill,rexx
+software,is_skill,richfaces
+software,is_skill,routing
+software,is_skill,rtos
+software,is_skill,s60
+software,is_skill,sap
+software,is_skill,sap abap
+software,is_skill,sap basis
+software,is_skill,sap bi
+software,is_skill,sap bl
+software,is_skill,sap bw
+software,is_skill,sap copa
+software,is_skill,sap crm
+software,is_skill,sap ep
+software,is_skill,sap fico
+software,is_skill,sap hr
+software,is_skill,sap idocs
+software,is_skill,sap is-gas/oil
+software,is_skill,sap is-retail
+software,is_skill,sap is-utilities
+software,is_skill,sap mdm
+software,is_skill,sap mm
+software,is_skill,sap pm
+software,is_skill,sap pp
+software,is_skill,sap practice
+software,is_skill,sap ps
+software,is_skill,sap qm
+software,is_skill,sap scm
+software,is_skill,sap sd
+software,is_skill,sap security
+software,is_skill,sap sem
+software,is_skill,sap srm
+software,is_skill,sap wms
+software,is_skill,sap xi
+software,is_skill,sas
+software,is_skill,savvion
+software,is_skill,scada
+software,is_skill,seam
+software,is_skill,seo
+software,is_skill,sharepoint moss
+software,is_skill,sharepoint server
+software,is_skill,shell scripting
+software,is_skill,siebel
+software,is_skill,silverlight
+software,is_skill,smarty
+software,is_skill,smo
+software,is_skill,smtp
+software,is_skill,software testing
+software,is_skill,solaris
+software,is_skill,soundforge
+software,is_skill,spring
+software,is_skill,spss
+software,is_skill,sql
+software,is_skill,sql server
+software,is_skill,staad
+software,is_skill,struts
+software,is_skill,sunos
+software,is_skill,switching
+software,is_skill,sybase
+software,is_skill,symbian
+software,is_skill,symbian c++
+software,is_skill,syncml
+software,is_skill,t sql
+software,is_skill,tally
+software,is_skill,tcl/tk
+software,is_skill,tcp/ip
+software,is_skill,telnet
+software,is_skill,teradata
+software,is_skill,tibco
+software,is_skill,toad
+software,is_skill,turbo pascal
+software,is_skill,tuxedo
+software,is_skill,uiq
+software,is_skill,uml
+software,is_skill,unigraphics
+software,is_skill,unix
+software,is_skill,upstream
+software,is_skill,vax/vms
+software,is_skill,vb.net
+software,is_skill,vbscript
+software,is_skill,verilog
+software,is_skill,video editing
+software,is_skill,vignette
+software,is_skill,vision plus
+software,is_skill,visual basic
+software,is_skill,visual c++
+software,is_skill,visual foxpro
+software,is_skill,visual interdev
+software,is_skill,vlsi
+software,is_skill,voip
+software,is_skill,vsat
+software,is_skill,vss/clearcase
+software,is_skill,vxworks
+software,is_skill,web designing
+software,is_skill,weblogic
+software,is_skill,webmethods
+software,is_skill,website development
+software,is_skill,websphere
+software,is_skill,winform
+software,is_skill,winrunner
+software,is_skill,wml
+software,is_skill,wpf
+software,is_skill,xdoclet
+software,is_skill,xenix
+software,is_skill,xhtml
+software,is_skill,xml
+software,is_skill,xstream
+software,is_skill,yantra
