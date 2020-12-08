@@ -21,6 +21,16 @@ docker run --rm -it -p 80:5000 \
   shubhamtatvamasi/private:uadyam
 ```
 
+Tag the docker image
+```bash
+docker tag shubhamtatvamasi/private:uadyam shubhamtatvamasi/private:uadyam-1
+```
+
+Push the docker image
+```bash
+docker push shubhamtatvamasi/private:uadyam-1
+```
+
 ### Kubernetes
 
 Create a POD on k8s and expose it's service on NodePort 31001
