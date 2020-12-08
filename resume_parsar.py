@@ -387,7 +387,7 @@ class resumeParsar():
 
 if __name__ == "__main__":
     rp = resumeParsar()
-    filename= "//home//lid//Downloads//Omar_Nour_CV.docx"
+    filename= os.getcwd() + "/downloads/Omar_Nour_CV.docx"
     print(filename)
     result = rp.generate_resume_result(filename)
     print(result)
