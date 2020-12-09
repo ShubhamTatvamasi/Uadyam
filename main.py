@@ -17,7 +17,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/Resume_Parsar', methods=['GET'])
+@app.route('/Resume_Parsar', methods=['POST'])
 def resume_parsar():
     # check if the post request has the file part
     if 'file' not in request.files:
@@ -46,7 +46,7 @@ def resume_parsar():
         return resp
 
 
-@app.route('/Jd_Parsar', methods=['GET'])
+@app.route('/Jd_Parsar', methods=['POST'])
 def jd_parsar():
     # check if the post request has the file part
     if 'file' not in request.files:
@@ -73,7 +73,7 @@ def jd_parsar():
         return resp
 
 
-@app.route('/Matcher', methods=['GET'])
+@app.route('/Matcher', methods=['POST'])
 def matcher():
     # check if the post request has the file part
     if 'resume_file' not in request.files:
