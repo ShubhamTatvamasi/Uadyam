@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from pathlib import Path
 full_path = os.getcwd()
-RESUME_FOLDER = str(Path(full_path).parents[0]) + '/app/resumes'
+RESUME_FOLDER = str(Path(full_path).parents[0]) + '/app/resume'
 JD_FOLDER = str(Path(full_path).parents[0]) + '/app/jd'
 
 
