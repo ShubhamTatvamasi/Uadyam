@@ -35,7 +35,7 @@ docker push shubhamtatvamasi/private:uadyam-1
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
-kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-1 --port=5000 --expose \
+kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-4 --port=5000 --expose \
   --overrides='{
    "apiVersion":"v1",
    "spec":{
@@ -46,7 +46,7 @@ kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-1 --port=5000 --expos
       ]
    }
 }' \
-  --command -- python resume_parsar_app.py
+  --command -- python main.py
 
 kubectl patch svc uadyam \
   --patch='{"spec": {"type": "NodePort"}}'

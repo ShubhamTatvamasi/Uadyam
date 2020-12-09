@@ -15,13 +15,15 @@ import sys
 from pathlib import Path
 from word2number import w2n
 import numpy as np
+import en_core_web_sm
+
+nlp = en_core_web_sm.load()
 from gensim import corpora, models, similarities
 
 from nltk.corpus import stopwords
 STOPWORDS = set(stopwords.words('english'))
 curdir = os.getcwd()
 sys.path.append(curdir)
-sys.path.append(str(Path(os.getcwd()).parents[0]) + '/brand_tagger/brand_tagger_crf/')
 class resumeParsar():
     def __init__(self):
         self.full_path = os.getcwd()
@@ -125,6 +127,8 @@ class resumeParsar():
             if any(edu in str(table_text).lower() for edu in self.education):
                 break
             return table_text
+        else:
+            return ''
 
     def readdocxFile(self,filename):
         doc = docx.Document(filename)
@@ -166,13 +170,13 @@ class resumeParsar():
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if any(skill in str(text_para).lower() for skill in self.skills) and count < 2:
+            if any(skill in str(text_para).lower() for skill in self.skills) and count < 3:
                 primary_skill = primary_skill + ',' + str(
                     [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
                                                                                                                '').replace(
                     '\'', '').replace(', ', ',').strip()
                 count = count + 1
-            elif any(skill in str(text_para).lower() for skill in self.skills) and count >= 2:
+            elif any(skill in str(text_para).lower() for skill in self.skills) and count > 2:
                 secondry_skill = secondry_skill + ',' + str(
                     [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
                                                                                                                '').replace(
@@ -387,7 +391,8 @@ class resumeParsar():
 
 if __name__ == "__main__":
     rp = resumeParsar()
-    filename= os.getcwd() + "/downloads/Omar_Nour_CV.docx"
+    #filename= "//home//lid//Downloads//Omar_Nour_CV.docx"
+    filename=sys.argv[1]
     print(filename)
     result = rp.generate_resume_result(filename)
     print(result)

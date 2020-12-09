@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from gensim import corpora, models, similarities
 from nltk.corpus import stopwords
+import sys
 STOPWORDS = set(stopwords.words('english'))
 
 class jdParsar():
@@ -103,13 +104,13 @@ class jdParsar():
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if any(skill in str(text_para).lower() for skill in self.skills) and count < 2:
+            if any(skill in str(text_para).lower() for skill in self.skills) and count < 3:
                 primary_skill = primary_skill + ',' + str(
                     [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
                                                                                                                '').replace(
                     '\'', '').replace(', ', ',').strip()
                 count = count + 1
-            elif any(skill in str(text_para).lower() for skill in self.skills) and count >= 2:
+            elif any(skill in str(text_para).lower() for skill in self.skills) and count > 3:
                 secondry_skill = secondry_skill + ',' + str(
                     [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
                                                                                                                '').replace(
@@ -242,18 +243,9 @@ class jdParsar():
 
 if __name__ == "__main__":
     jdp = jdParsar()
-    jd_location = "//home//lid//Downloads//Job Description-20201121T112409Z-001//Job Description//*.docx"
-    file_names=jdp.getfilenames(jd_location)
-    for file in file_names:
-        print(file)
-        print('**************************')
-        print(jdp.getparsedjd(file))
-        print('***************************')
+    filename = sys.argv[1]
+    print(jdp.getparsedjd(filename))
 
-    '''
-    df_jds=jdp.getparsedjd(file_names)
-    df_jds_1=df_jds.head(1)
-    print(df_jds_1.to_dict('dict'))'''
 
 
 
