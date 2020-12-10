@@ -35,7 +35,7 @@ docker push shubhamtatvamasi/private:uadyam-1
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
-kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-4 --port=5000 --expose \
+kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-8 --port=5000 --expose \
   --overrides='{
    "apiVersion":"v1",
    "spec":{
@@ -48,6 +48,7 @@ kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-4 --port=5000 --expos
 }' \
   --command -- python main.py
 
+# Don't add these if using Ingress:
 kubectl patch svc uadyam \
   --patch='{"spec": {"type": "NodePort"}}'
 
@@ -59,3 +60,31 @@ Update the docker image
 ```bash
 kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-2
 ```
+
+Ingress deployment
+```bash
+kubectl apply -f - << EOF
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: uadyam
+spec:
+  tls:
+  - hosts:
+      - uadyam.k8s.shubhamtatvamasi.com
+    secretName: letsencrypt
+  rules:
+  - host: uadyam.k8s.shubhamtatvamasi.com
+    http:
+      paths:
+      - backend:
+          serviceName: uadyam
+          servicePort: 5000
+EOF
+```
+
+Delete deployment
+```bash
+kubectl delete pod/uadyam service/uadyam
+```
+
