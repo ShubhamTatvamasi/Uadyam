@@ -7,7 +7,7 @@ from resume_parsar import resumeParsar
 from jd_parsar import jdParsar
 from matcher import matcher
 
-ALLOWED_EXTENSIONS = set(['docx'])
+ALLOWED_EXTENSIONS = set(['docx', 'doc'])
 rp = resumeParsar()
 jdp = jdParsar()
 mp = matcher()
