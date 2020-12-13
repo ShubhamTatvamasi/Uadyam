@@ -14,4 +14,6 @@ COPY . .
 
 RUN pip install resume_parser
 
+RUN apt update && apt install antiword
+
 ENTRYPOINT ["python"]
