@@ -9,7 +9,7 @@ docker build -t shubhamtatvamasi/private:uadyam .
 
 Run application
 ```bash
-docker run --rm -it -p 80:5000 shubhamtatvamasi/private:uadyam resume_parsar_app.py
+docker run --rm -it -p 80:5000 shubhamtatvamasi/private:uadyam main.py
 ```
 
 For testing and building docker image
@@ -58,7 +58,7 @@ kubectl patch svc uadyam \
 
 Update the docker image
 ```bash
-kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-2
+kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-9
 ```
 
 Ingress deployment

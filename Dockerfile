@@ -12,4 +12,6 @@ RUN python -m spacy download en
 
 COPY . .
 
+RUN pip install resume_parser
+
 ENTRYPOINT ["python"]

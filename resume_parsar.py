@@ -1,24 +1,21 @@
-import PyPDF2
-import textract
-import docx
+import datetime
 import math
-import pandas as pd
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import stopwords
-import re
-from docx.opc.constants import RELATIONSHIP_TYPE as RT
-import spacy
-from spacy.matcher import Matcher
-import spacy
 import os
+import re
 import sys
 from pathlib import Path
-from word2number import w2n
-import numpy as np
+
+import PyPDF2
+import docx
 import en_core_web_sm
+import numpy as np
+import pandas as pd
+import textract
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
+from word2number import w2n
+from resume_parser import resumeparse
 
 nlp = en_core_web_sm.load()
-from gensim import corpora, models, similarities
 
 from nltk.corpus import stopwords
 STOPWORDS = set(stopwords.words('english'))
@@ -34,12 +31,14 @@ class resumeParsar():
         self.df_hobbies = pd.read_csv(self.data_path+ 'Hobbies.csv')
         self.hobbies = list(self.df_hobbies['hobbies'])
         self.hobbies = [' {0} '.format(elem) for elem in self.hobbies]
-        self.education = [
-                'BE','B.E.', 'B.E', 'BS', 'B.S',
-                'ME', 'M.E', 'M.E.', 'MS', 'M.S',
-                'BTECH', 'B.TECH', 'M.TECH', 'MTECH','BCA','MCA','BSC','MSC','B.S.C','M.S.C','M.C.A' 
-                'SSC', 'HSC', 'CBSE', 'ICSE', 'X', 'XII','10TH','12TH','BACHELORS OF ENGINEERING','B.E','PG','PGP','PGPA'
-    ,'PGDBA']
+        self.education = ['B.E.', 'B.E', 'B.S',
+                 'M.E', 'M.E.', 'M.S',
+                'BTECH', 'B.TECH','B.TECH', 'M.TECH',
+                'MTECH','BCA','MCA','BSC','MSC','B.S.C','M.S.C','M.C.A' 
+                ' SSC ', ' HSC ', 'CBSE', 'ICS ', ' X ', ' XII ','10TH','12TH ',
+                'BACHELORS OF ENGINEERING','B.E',' PG ',' PGP ','PGPA','BBA','12th' ,'10th ',' CA '
+                ,' CBSE ',' ICSE '
+               ,' PGDBA ',' UNIVERISTY ',' SCHOOL ',' COLLEGE ']
         self.df_locations = pd.read_csv(self.data_path + 'Locations.csv')
         self.locations = list(self.df_locations['Cities'])
         self.locations = [' {0} '.format(elem) for elem in self.locations]
@@ -51,7 +50,7 @@ class resumeParsar():
         return extension
 
     def checkExtension(self,filename):
-        ValidExtension = ["pdf", "docx"]
+        ValidExtension = ["pdf", "docx","doc"]
         extension = self.getFileExtension(filename)
         if extension not in ValidExtension:
             print("Error:Not a valid File")
@@ -142,6 +141,29 @@ class resumeParsar():
         fullText = fullText + " " + hls
         return fullText
 
+    def doc_to_docx(self,filename):
+        text = textract.process(filename)
+        text = text.decode("utf-8")
+        texts = text.split('\n')
+        doc = docx.Document()
+        para_change_flag = 0
+        para_text = ''
+
+        for text in texts:
+            # print(text)
+            if text.strip() == '':
+                para_change_flag = 1
+            else:
+                para_change_flag = 0
+            if para_change_flag == 1 and para_text.strip() != '':
+                doc_para = doc.add_paragraph(para_text)
+                para_text = ''
+            else:
+                para_text = para_text + '\n' + text
+        new_filename = filename + 'x'
+        doc.save(new_filename)
+        return new_filename
+
     def extract_name(self,fulltext):
         name = re.findall("[\dA-Za-z+\' ']*", fulltext)[0]
         return name
@@ -164,26 +186,24 @@ class resumeParsar():
                 return None
 
     def extract_primary_secondry_skill(self,filename):
-        primary_skill = ''
-        secondry_skill = ''
+        primary_skill = []
+        secondry_skill = []
         count = 0
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if any(skill in str(text_para).lower() for skill in self.skills) and count < 3:
-                primary_skill = primary_skill + ',' + str(
-                    [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+            if any(skill in str(text_para).lower() for skill in self.skills) and count < 2:
+                primary_skill.extend([skill for skill in self.skills if (skill in str(text_para).lower())])
                 count = count + 1
             elif any(skill in str(text_para).lower() for skill in self.skills) and count > 2:
-                secondry_skill = secondry_skill + ',' + str(
-                    [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+                secondry_skill.extend([skill for skill in self.skills if (skill in str(text_para).lower())])
                 count = count + 1
-        primary_skill = ','.join(set(primary_skill.split(',')))
-        secondry_skill = ','.join(set(secondry_skill.split(',')))
+            if len(primary_skill) > 3:
+                primary_skill_final = primary_skill[0:2]
+                secondry_skill.extend(primary_skill[3:len(primary_skill) - 1])
+        primary_skill = list(dict.fromkeys(primary_skill_final))
+        secondry_skill = list(dict.fromkeys(secondry_skill))
+        return primary_skill, secondry_skill
         return primary_skill, secondry_skill
 
     def extract_current_preferred_location(self,filename):
@@ -237,92 +257,108 @@ class resumeParsar():
             skills_all = skills_all + ',' + str([skill for skill in self.skills if (skill in str(resume_text).lower())]).replace('[', '').replace(']','').replace('\'', '').replace(', ', ',').strip()
         return skills_all
 
-    def extract_education(self,resume_text, filename):
-        education = []
-        escape_text = ['personal', 'course', 'certification', 'certifications', 'certificate', 'declaration', 'declare',
-                       'skill', 'project', 'experience', 'projects']
+    def extract_education(self,filename):
+        ls_edu = []
         doc = docx.Document(filename)
-        i = 0
-        found_in_para = 0
+        escape_text = ['personal', 'course', 'certification', 'certifications', 'certificate',
+                       'declaration', 'declare',
+                       'skill', 'project', 'experience', 'projects','company','companies']
+        escape_text.extend(self.skills)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if found_in_para == 1 and len(text_para) > 2:
-                if any(ext in text_para.lower() for ext in escape_text):
-                    found_in_para = 2
-                else:
-                    education.append(text_para)
-            if 'education' in text_para.lower():
-                found_in_para = 1
-        if found_in_para == 0:
-            nlp_text = nlp(resume_text)
-            nlp_text = [sent.string.strip() for sent in nlp_text.sents]
-
-            edu = {}
-            for index, text in enumerate(nlp_text):
-                for tex in text.split():
-                    tex = re.sub(r'[?|$|.|!|,]', r'', tex)
-                    if tex.upper() in self.education and tex not in STOPWORDS:
-                        edu[tex] = text + nlp_text[index + 1]
-            # Extract year
-
-            for key in edu.keys():
-                year = re.search(re.compile(r'(((20|19)(\d{2})))'), edu[key])
-                if year:
-                    education.append((key, ''.join(year[0])))
-                else:
-                    education.append(key)
-        return education
+            if any(ext in text_para.lower() for ext in escape_text):
+                ls_edu = ls_edu
+            elif any(edu.lower() in text_para.lower() for edu in self.education):
+                ls_edu.append(text_para.strip())
+        if len(ls_edu) > 0:
+            return ls_edu
+        else:
+            return ls_edu
 
     def getexpr(self,filename):
         text_exp = ""
+        exclude_text=['name','father','address','personal','married','single']
+        exclude_text.extend(self.education)
+        exclude_text.extend(self.locations)
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
             match = re.findall(r'.*(\s[1-3][0-9]{3}|3000)', text_para)
             if match:
-                if any(ext in text_para.upper() for ext in self.education):
+                if any(ext.lower() in text_para.lower() for ext in exclude_text):
                     text_exp = text_exp
                 else:
                     text_exp = text_exp + "\n" + text_para + " "
         return text_exp
 
     def project_details(self,filename):
-        valid_para = []
+        doc = docx.Document(filename)
+        project_text = ''
+        exclude_texts = ['education', 'skill', 'certificate', 'windows', 'win', 'version', 'university', 'school',
+                         'college']
+        exclude_texts.extend(self.education)
+        start_para = 6
+        para_size = len(doc.paragraphs)
+        end_para = math.ceil(para_size * 80 / 100)
+        for para in doc.paragraphs[start_para:end_para]:
+            text_para = (para.text)
+            if any(et.lower() in str(text_para).lower() for et in exclude_texts):
+                project_text = project_text
+            else:
+                project_text = project_text + ' ' + text_para
+        return project_text
+
+    def get_project_regex(self,filename):
+        pro_text = []
+        project_texts = ['project']
+        exclude_texts = ['education', 'skill', 'experience']
+        exclude_texts.extend(self.education)
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if len((text_para).strip()) > 5:
-                valid_para.append(text_para)
-        para_size = len(valid_para)
-        end_index = math.ceil(para_size * 80 / 100)
-        mylist = valid_para[5:end_index]
-        projects = ('\n'.join(mylist))
-        return projects
+            if any(pt in str(text_para).lower() for pt in project_texts):
+                if any(et in str(text_para).lower() for et in exclude_texts):
+                    pro_text = pro_text
+                else:
+                    pro_text.append(text_para.replace('project', ''))
+        return pro_text
+
     def extractoverall_experience_through_yrs(self,filename):
         doc = docx.Document(filename)
+        now = datetime.datetime.now()
+        curr_yr = now.year
+        max_working_yr = curr_yr - 40
         yrs = []
+        exclude_texts = ['education', 'skill', 'certificate', 'windows', 'win', 'version']
+        exclude_texts.extend(self.education)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if 'education' not in text_para.lower():
-                yrs.extend(re.findall('(\d{4})',text_para))
-        if len(yrs)>1:
+            match = re.findall(r'.*(\s[1-3][0-9]{3}|3000)', text_para)
+            if match:
+                if any(et.lower() in str(text_para).lower() for et in exclude_texts):
+                    yrs = yrs
+                else:
+                    yrs.extend(match)
+        if len(yrs) > 0:
+            yrs = [str(yr).strip() for yr in yrs if
+                   (str(yr).strip() > str(max_working_yr) and str(yr).strip() <= str(curr_yr))]
+            yrs.append(curr_yr)
+            yrs = list(set(yrs))
+            yrs = [int(yr) for yr in yrs]
             yrs.sort()
-            yrs = [int(i) for i in yrs]
-            diffrence = np.diff(yrs)
-            if diffrence[0]>15:
-                #yrs = [str(i) for i in yrs]
-                length = len(yrs)
-                yrs = yrs[1:length]
-        elif len(yrs)<1:
-            yrs = []
-        yrs = [int(i) for i in yrs]
-        diff = np.diff(yrs)
-        if len(diff)>0:
-            return str(sum(diff))+' '+'years'
+            ex_limt = np.mean(np.diff(yrs)) + 2
+            ex_limit_pos = []
+            pos = 0
+            for i in np.diff(yrs):
+                if i > ex_limt:
+                    ex_limit_pos.append(pos)
+                pos = pos + 1
+            for pos in ex_limit_pos:
+                del yrs[pos]
+            overall_exp = max(yrs) - min(yrs)
         else:
-            return ""
-
-
+            overall_exp = ''
+        return str(overall_exp) + ' years'
 
     def extract_overall_experience(self,filename):
         doc = docx.Document(filename)
@@ -344,34 +380,49 @@ class resumeParsar():
         if len(yrs)>0 and max(yrs) >0:
             return str(max(yrs))+' '+'years'
         else:
-            #return self.extractoverall_experience_through_yrs(filename)
-            return ''
+            return self.extractoverall_experience_through_yrs(filename)
+            #return ''
 
+    def parse_direct(self,filename):
+        result_direct = resumeparse.read_file(filename)
+        return result_direct
 
     def generate_resume_result(self,filename):
         result = {}
         if self.checkExtension(filename):
             extension = self.getFileExtension(filename)
-            if extension == 'docx':
+            if extension == 'docx' or extension == 'doc':
+                if extension == 'doc':
+                    filename = self.doc_to_docx(filename)
                 fulltext = self.readdocxFile(filename)
                 tables = self.readtables(filename)
             else:
                 fulltext = self.readpdfFile(filename)
             tabular_data = self.readtables(filename)
-            if self.extract_name(fulltext):
+            result_direct = self.parse_direct(filename)
+            if self.extract_name(fulltext) and self.extract_name(fulltext).strip()!='':
                 result['Name'] = self.extract_name(fulltext)
-            if self.extract_mobile_number(fulltext):
+            else:
+                result['Name'] = str(result_direct['name']).replace('Phone','').replace('phone','').replace('Mobile','').replace('mobile','')
+
+            if self.extract_mobile_number(fulltext) and self.extract_mobile_number(fulltext).strip()!='':
                 result['Mobile_number'] = self.extract_mobile_number(fulltext)
-            if self.extract_email(fulltext):
+            else:
+                result['Mobile_number'] = result_direct['phone']
+            if self.extract_email(fulltext) and len(self.extract_email(fulltext)) > 0:
                 result['Email'] = self.extract_email(fulltext)
+            else:
+                result['Email'] = result_direct['email']
             if self.extract_skills(fulltext):
                 result['Skills_All'] = self.extract_skills(fulltext)
             elif len(self.extracttabletextskills(fulltext, self.skills)) > 0:
                 result['Skills_All'] = self.extracttabletextskills(fulltext, self.skills)
-            if self.extract_education(fulltext, filename):
-                result['Education'] = self.extract_education(fulltext, filename)
+            if self.extract_education(filename) and len(self.extract_education(filename)) >0:
+                result['Education'] = self.extract_education(filename)
             elif len(self.extracttabletexteducation(filename)) > 0:
                 result['Education'] = self.extracttabletexteducation(filename)
+            else:
+                result['Education'] = result_direct['degree']
             result['Experience'] = self.getexpr(filename)
             Primary_skills, Secondary_skills = self.extract_primary_secondry_skill(filename)
             Current_Location,Preferred_Location = self.extract_current_preferred_location(filename)
@@ -381,7 +432,11 @@ class resumeParsar():
             result['Current_Location'] = Current_Location
             result['Preferred_Location'] = self.extract_location(fulltext)
             result['Projects'] = self.project_details(filename)
-            result['Overall_Experience'] = Overall_Experience
+            if Overall_Experience and Overall_Experience.strip()!='':
+                result['Overall_Experience'] = Overall_Experience
+            else:
+                result['Overall_Experience'] = result_direct['total_exp']
+            result['Designation'] = result_direct['designition']
             result['Hobbies'] = self.extract_hobbies(fulltext)
             result['Visa'] = self.visa_check(fulltext)
         return result
@@ -392,7 +447,7 @@ class resumeParsar():
 if __name__ == "__main__":
     rp = resumeParsar()
     #filename= "//home//lid//Downloads//Omar_Nour_CV.docx"
-    filename=sys.argv[1]
+    filename = sys.argv[1]
     print(filename)
     result = rp.generate_resume_result(filename)
     print(result)
