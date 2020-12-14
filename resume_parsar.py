@@ -13,7 +13,10 @@ import pandas as pd
 import textract
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from word2number import w2n
-from resume_parser import resumeparse
+#from resume_parser import resumeparse
+#import tika
+#tika.initVM()
+#from tika import parser
 
 nlp = en_core_web_sm.load()
 
@@ -201,10 +204,11 @@ class resumeParsar():
             if len(primary_skill) > 3:
                 primary_skill_final = primary_skill[0:2]
                 secondry_skill.extend(primary_skill[3:len(primary_skill) - 1])
+            else:
+                primary_skill_final=primary_skill
         primary_skill = list(dict.fromkeys(primary_skill_final))
         secondry_skill = list(dict.fromkeys(secondry_skill))
-        return primary_skill, secondry_skill
-        return primary_skill, secondry_skill
+        return str(primary_skill).replace('[','').replace('[',''), str(secondry_skill).replace('[','').replace('[','')
 
     def extract_current_preferred_location(self,filename):
         Current_Location = ''
@@ -384,8 +388,11 @@ class resumeParsar():
             #return ''
 
     def parse_direct(self,filename):
-        result_direct = resumeparse.read_file(filename)
-        return result_direct
+        '''try:
+            result_direct = resumeparse.read_file(filename)
+            return result_direct
+        except:'''
+        return {"degree":[],"designition":[],"email":"","name":"","phone":"","skills":[],"total_exp":'NA',"university":[]}
 
     def generate_resume_result(self,filename):
         result = {}
