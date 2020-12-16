@@ -35,7 +35,7 @@ docker push shubhamtatvamasi/private:uadyam-1
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
-kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-14 --port=5000 --expose \
+kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-15 --port=5000 --expose \
   --overrides='{
    "apiVersion":"v1",
    "spec":{
@@ -58,7 +58,7 @@ kubectl patch svc uadyam \
 
 Update the docker image
 ```bash
-kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-14
+kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-15
 ```
 
 Ingress deployment

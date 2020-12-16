@@ -38,7 +38,7 @@ class resumeParsar():
                  'M.E', 'M.E.', 'M.S',
                 'BTECH', 'B.TECH','B.TECH', 'M.TECH',
                 'MTECH','BCA','MCA','BSC','MSC','B.S.C','M.S.C','M.C.A' 
-                ' SSC ', ' HSC ', 'CBSE', 'ICS ', ' X ', ' XII ','10TH','12TH ',
+                ' SSC ', ' HSC ', 'CBSE', 'ICSE ', ' Xth ', ' XIIth ','10TH','12TH ',
                 'BACHELORS OF ENGINEERING','B.E',' PG ',' PGP ','PGPA','BBA','12th' ,'10th ',' CA '
                 ,' CBSE ',' ICSE '
                ,' PGDBA ',' UNIVERISTY ',' SCHOOL ',' COLLEGE ']
