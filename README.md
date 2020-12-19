@@ -33,6 +33,43 @@ docker push shubhamtatvamasi/private:uadyam-1
 
 ### Kubernetes
 
+Create Deployment:
+```yaml
+kubectl apply -f - << EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uadyam
+  labels:
+    app: uadyam
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uadyam
+  template:
+    metadata:
+      labels:
+        app: uadyam
+    spec:
+      containers:
+      - name: uadyam
+        image: shubhamtatvamasi/private:uadyam-16
+      imagePullSecrets:
+      - name: docker-shubhamtatvamasi
+EOF
+```
+
+Create service for Deployment:
+```bash
+kubectl expose deployment uadyam --port=5000 --name=uadyam
+```
+
+Scale Deployment:
+```bash
+kubectl scale deployment uadyam --replicas=3
+```
+
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
 kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-15 --port=5000 --expose \
