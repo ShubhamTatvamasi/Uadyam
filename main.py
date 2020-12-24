@@ -6,11 +6,13 @@ from werkzeug.utils import secure_filename
 from resume_parsar import resumeParsar
 from jd_parsar import jdParsar
 from matcher import matcher
+from matcher_bulk import matcher_bulk
 
-ALLOWED_EXTENSIONS = set(['docx', 'doc'])
+ALLOWED_EXTENSIONS = set(['docx','doc'])
 rp = resumeParsar()
 jdp = jdParsar()
 mp = matcher()
+mb = matcher_bulk()
 
 
 def allowed_file(filename):
@@ -111,6 +113,29 @@ def matcher():
     resp = mp.get_similarity_overall(resp_jd, resp_resume, mp.skill_2_vec)
     resp['status_code']=200
     return jsonify(resp)
+
+@app.route('/Matcher_Bulk', methods=['POST'])
+def Matcher_Bulk():
+    if 'resume_ls' in request.json:
+        resumes = request.json['resume_ls']
+        if 'jd_ls' in request.json:
+            jds = request.json['jd_ls']
+            result = mb.match_bulk(resumes, jds)
+            print(result)
+            resp = jsonify({'result': result})
+            print(resp)
+            resp.status_code = 200
+            return resp
+        else:
+            resp = jsonify({'message': 'No jd output in the request'})
+            resp.status_code = 400
+            return resp
+    else:
+        resp = jsonify({'message': 'No resume output in the request'})
+        resp.status_code = 400
+        return resp
+
+
 
 
 

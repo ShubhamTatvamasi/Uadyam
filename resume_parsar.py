@@ -47,6 +47,11 @@ class resumeParsar():
         self.locations = [' {0} '.format(elem) for elem in self.locations]
 
 
+    def listToString(self,ls):
+        str1 = ""
+        for ele in ls:
+            str1 += ele.strip() + ','
+        return str1
 
     def getFileExtension(self,filename):
         extension = filename.split('.')[-1]
@@ -208,58 +213,50 @@ class resumeParsar():
                 primary_skill_final=primary_skill
         primary_skill = list(dict.fromkeys(primary_skill_final))
         secondry_skill = list(dict.fromkeys(secondry_skill))
-        return str(primary_skill).replace('[','').replace('[',''), str(secondry_skill).replace('[','').replace('[','')
+        #return str(primary_skill).replace('[','').replace(']',''), str(secondry_skill).replace('[','').replace(']','')
+        return self.listToString(primary_skill),self.listToString(secondry_skill)
 
     def extract_current_preferred_location(self,filename):
-        Current_Location = ''
-        Preferred_Location = ''
         count = 0
+        Current_Location=[]
+        Preferred_Location=[]
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
             if any(str(location) in str(text_para).lower() for location in self.locations) and count < 2:
-                Current_Location = Current_Location + ',' + str(
-                    [str(location) for location in self.locations if (str(location) in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+                Current_Location = [str(location) for location in self.locations if (str(location) in str(text_para).lower())]
                 count = count + 1
             elif any(str(location) in str(text_para).lower() for location in self.locations) and count >= 2:
-                Preferred_Location = Preferred_Location + ',' + str(
-                    [str(location) for location in self.locations if (str(location) in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+                Preferred_Location = [str(location) for location in self.locations if (str(location) in str(text_para).lower())]
                 count = count + 1
-        Current_Location = ','.join(set(Current_Location.split(',')))
-        Preferred_Location = ','.join(set(Preferred_Location.split(',')))
-        return Current_Location, Preferred_Location
+        Current_Location = list(set(Current_Location))
+        Preferred_Location = list(set(Preferred_Location))
+        return self.listToString(Current_Location), self.listToString(Preferred_Location)
 
     def extract_location(self,resume_text):
-        location_all = ''
+        location_all = []
         if any(str(location) in str(resume_text).lower() for location in self.locations):
-            location_all = location_all + ',' + str([str(location) for location in self.locations if (str(location) in str(resume_text).lower())]).replace('[','').replace(']','').replace('\'', '').replace(', ', ',').strip()
-        return location_all
+            location_all = [str(location) for location in self.locations if (str(location) in str(resume_text).lower())]
+        return self.listToString(location_all)
 
     def extract_hobbies(self,resume_text):
-        hobbies_all = ''
+        hobbies_all = []
         if any(str(hobby) in str(resume_text).lower() for hobby in self.hobbies):
-            hobbies_all = hobbies_all + ',' + str([str(hobby) for hobby in self.hobbies if (str(hobby) in str(resume_text).lower())]).replace('[','').replace(']','').replace('\'', '').replace(', ', ',').strip()
-        return hobbies_all
+            hobbies_all = [str(hobby) for hobby in self.hobbies if (str(hobby) in str(resume_text).lower())]
+        return self.listToString(hobbies_all)
 
     def visa_check(self,resume_text):
-        visa_all=''
+        visa_all=[]
         visas = ['h1b','h1n1','l1','schengen']
         if any(str(visa) in str(resume_text).lower() for visa in visas):
-            visa_all = visa_all + ',' + str([str(visa) for visa in visas if (str(visa) in str(resume_text).lower())]).replace('[',
-                                                                                                            '').replace(
-                ']', '').replace('\'', '').replace(', ', ',').strip()
-        return visa_all
-
+            visa_all = [str(visa) for visa in visas if (str(visa) in str(resume_text).lower())]
+        return self.listToString(visa_all)
 
     def extract_skills(self,resume_text):
         skills_all = ''
         if any(skill in str(resume_text).lower() for skill in self.skills):
-            skills_all = skills_all + ',' + str([skill for skill in self.skills if (skill in str(resume_text).lower())]).replace('[', '').replace(']','').replace('\'', '').replace(', ', ',').strip()
-        return skills_all
+            skills_all = [skill for skill in self.skills if (skill in str(resume_text).lower())]
+        return self.listToString(skills_all)
 
     def extract_education(self,filename):
         ls_edu = []
@@ -275,9 +272,9 @@ class resumeParsar():
             elif any(edu.lower() in text_para.lower() for edu in self.education):
                 ls_edu.append(text_para.strip())
         if len(ls_edu) > 0:
-            return ls_edu
+            return self.listToString(ls_edu)
         else:
-            return ls_edu
+            return self.listToString(ls_edu)
 
     def getexpr(self,filename):
         text_exp = ""
@@ -387,6 +384,15 @@ class resumeParsar():
             return self.extractoverall_experience_through_yrs(filename)
             #return ''
 
+    def get_file_nm(self, filenm):
+        try:
+            filenms = filenm.split('/')
+            length = len(filenms) - 1
+            file_name = filenms[length]
+        except:
+            file_name = filenm
+        return file_name
+
     def parse_direct(self,filename):
         '''try:
             result_direct = resumeparse.read_file(filename)
@@ -446,6 +452,7 @@ class resumeParsar():
             result['Designation'] = result_direct['designition']
             result['Hobbies'] = self.extract_hobbies(fulltext)
             result['Visa'] = self.visa_check(fulltext)
+            result['Filename'] = self.get_file_nm(filename)
         return result
 
 
@@ -453,7 +460,7 @@ class resumeParsar():
 
 if __name__ == "__main__":
     rp = resumeParsar()
-    #filename= "//home//lid//Downloads//Omar_Nour_CV.docx"
+    # filename= "//home/lid/Downloads//Omar_Nour_CV.docx"
     filename = sys.argv[1]
     print(filename)
     result = rp.generate_resume_result(filename)

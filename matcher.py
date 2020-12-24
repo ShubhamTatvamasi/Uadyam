@@ -86,11 +86,13 @@ class matcher():
 
     def get_similarity_overall(self,jd_result,resume_result,skill_2_vec):
         print('similarity calculation is in progress')
-        result={}
-        resume_skill_all_vector = self.get_mean_vector(skill_2_vec, resume_result['Skills_All'])
-        resume_primary_skill_vector = self.get_mean_vector( skill_2_vec, resume_result['Primary_Skills'])
-        jd_skill_all_vector=self.get_mean_vector( skill_2_vec, jd_result['Skills_All'])
+        result = {}
+        resume_skill_all_vector = self.get_mean_vector(skill_2_vec, resume_result['Skills_All'].split(','))
+        resume_primary_skill_vector = self.get_mean_vector( skill_2_vec, resume_result['Primary_Skills'].split(','))
+        jd_skill_all_vector=self.get_mean_vector( skill_2_vec, jd_result['Skills_All'].split(','))
         jd_primary_skill_vector=self.get_mean_vector(skill_2_vec, jd_result['Primary_Skills'])
+        result['Resume_filename'] = resume_result['Filename']
+        result['JD_filename'] = jd_result['Filename']
         result['Skill_All_Simalrity'] = self.get_similarity_score(resume_skill_all_vector, jd_skill_all_vector)
         result['Primary_Skill_Simalrity'] = self.get_similarity_score(resume_primary_skill_vector, jd_primary_skill_vector)
         result['Weighted_Skill_Similarity'] = ((result['Primary_Skill_Simalrity'] + result['Skill_All_Simalrity']/4))/2
@@ -110,18 +112,18 @@ class matcher():
         skill_all_resume=Counter(resume_result['Skills_All'].split(','))
         skill_all_jd=Counter(jd_result['Skills_All'].split(','))
         result['Skills_All_exact_similarity'] = self.counter_cosine_similarity(skill_all_resume,skill_all_jd)
-        result['Over_all_Similarity']= (result['Skills_All_exact_similarity']/2 + result['Skill_All_Simalrity']/2+ \
-                                       result['Primary_Skill_exact_similarity']/2+ \
-                                       result['Primary_Skill_Simalrity']/2 + result['Content_Similarity'] +result['Location_similarity'])/3
+        result['Over_all_Similarity']= (result['Skills_All_exact_similarity'] + result['Skill_All_Simalrity']+ \
+                                       result['Primary_Skill_exact_similarity']+ \
+                                       result['Primary_Skill_Simalrity'] + result['Content_Similarity'] +result['Location_similarity'])/6
         return result
 
 if __name__ == "__main__":
     mp = matcher()
-    #resume_filename = "//home//lid//Downloads//SurajKumar_1.docx"
+    # resume_filename = "//home//lid//Downloads//SurajKumar_1.docx"
     resume_filename = sys.argv[1]
     resume_result = mp.get_parsed_resume(resume_filename)
     print(resume_result)
-    #jd_file_name="//home//lid//Downloads//Job Description-20201121T112409Z-001//Job Description//DevOps_JD.docx"
+    # jd_file_name="//home//lid//Downloads//Job Description-20201121T112409Z-001//Job Description//DevOps_JD.docx"
     jd_file_name = sys.argv[2]
     result_jd = mp.get_parsed_jds(jd_file_name)
     print(result_jd)

@@ -72,7 +72,7 @@ kubectl scale deployment uadyam --replicas=3
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
-kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-15 --port=5000 --expose \
+kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-17 --port=5000 --expose \
   --overrides='{
    "apiVersion":"v1",
    "spec":{
@@ -82,8 +82,7 @@ kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-15 --port=5000 --expo
          }
       ]
    }
-}' \
-  --command -- python main.py
+}'
 
 # Don't add these if using Ingress:
 kubectl patch svc uadyam \

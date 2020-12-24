@@ -61,27 +61,20 @@ class jdParsar():
     def extract_skills(self,resume_text):
         skills_all = ''
         if any(skill in str(resume_text).lower() for skill in self.skills):
-            skills_all = skills_all + ',' + str(
-                [skill for skill in self.skills if (skill in str(resume_text).lower())]).replace('[', '').replace(']',
-                                                                                                             '').replace(
-                '\'', '').replace(', ', ',').strip()
-        return skills_all
+            skills_all = [skill for skill in self.skills if (skill in str(resume_text).lower())]
+        return self.listToString(skills_all)
 
     def extract_designation(self,resume_text):
         designations_all = ''
         if any(designation in str(resume_text).lower() for designation in self.designations):
-            designations_all = designations_all + ',' + str(
-                [designation for designation in self.designations if (designation in str(resume_text).lower())]).replace('[', '').replace(']',
-                                                                                                             '').replace(
-                '\'', '').replace(', ', ',').strip()
-        return designations_all
+            designations_all = [designation for designation in self.designations if (designation in str(resume_text).lower())]
+        return self.listToString(designations_all)
 
     def extract_location(self,resume_text):
         location_all = ''
         if any(str(location) in str(resume_text).lower() for location in self.locations):
-            location_all = location_all + ',' + str([str(location) for location in self.locations if (str(location) in str(resume_text).lower())]).replace('[','').replace(']','').replace('\'', '').replace(', ', ',').strip()
-        return location_all
-
+            location_all = [str(location) for location in self.locations if (str(location) in str(resume_text).lower())]
+        return self.listToString(location_all)
     def extract_notice_period(self,resumetext):
         if 'immediate' in resumetext.lower() and 'join' in resumetext.lower():
             np='immediate'
@@ -96,29 +89,34 @@ class jdParsar():
             np=str(np)+'days'
             return np
 
+    def listToString(self,ls):
+        str1 = ""
+        for ele in ls:
+            str1 += ele.strip() + ','
+        return str1
 
-    def extract_primary_secondry_skill(self,filename):
-        primary_skill = ''
-        secondry_skill = ''
+    def extract_primary_secondry_skill(self, filename):
+        primary_skill = []
+        secondry_skill = []
         count = 0
         doc = docx.Document(filename)
         for para in doc.paragraphs:
             text_para = (para.text)
-            if any(skill in str(text_para).lower() for skill in self.skills) and count < 3:
-                primary_skill = primary_skill + ',' + str(
-                    [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+            if any(skill in str(text_para).lower() for skill in self.skills) and count < 2:
+                primary_skill.extend([skill for skill in self.skills if (skill in str(text_para).lower())])
                 count = count + 1
-            elif any(skill in str(text_para).lower() for skill in self.skills) and count > 3:
-                secondry_skill = secondry_skill + ',' + str(
-                    [skill for skill in self.skills if (skill in str(text_para).lower())]).replace('[', '').replace(']',
-                                                                                                               '').replace(
-                    '\'', '').replace(', ', ',').strip()
+            elif any(skill in str(text_para).lower() for skill in self.skills) and count > 2:
+                secondry_skill.extend([skill for skill in self.skills if (skill in str(text_para).lower())])
                 count = count + 1
-        primary_skill = ','.join(set(primary_skill.split(',')))
-        secondry_skill = ','.join(set(secondry_skill.split(',')))
-        return primary_skill, secondry_skill
+            if len(primary_skill) > 3:
+                primary_skill_final = primary_skill[0:2]
+                secondry_skill.extend(primary_skill[3:len(primary_skill) - 1])
+            else:
+                primary_skill_final = primary_skill
+        primary_skill = list(dict.fromkeys(primary_skill_final))
+        secondry_skill = list(dict.fromkeys(secondry_skill))
+        #return str(primary_skill).replace('[', '').replace(']', ''), str(secondry_skill).replace('[', '').replace(']','')
+        return self.listToString(primary_skill),self.listToString(secondry_skill)
 
     def iter_hyperlink_rels(self,rels):
         hls = ""
@@ -188,7 +186,6 @@ class jdParsar():
         fullText = fullText + " " + hls
         return fullText
     def getfilenames(self,jd_location):
-        print("PPPPP")
         file_names = glob.glob(jd_location)
         return file_names
 
@@ -225,10 +222,20 @@ class jdParsar():
         df_jds['primary_skills'] = primary_skills
         df_jds['secondry_skills'] = secondry_skills
         return df_jds
+    def get_file_nm(self, filenm):
+        try:
+            filenms = filenm.split('/')
+            length = len(filenms) - 1
+            file_name = filenms[length]
+        except:
+            file_name = filenm
+        return file_name
 
     def getparsedjd(self,file):
         result={}
         resume_text = self.readdocxFile(file)
+        file_name = self.get_file_nm(file)
+        result['Filename'] = file_name
         result['Title'] = self.extract_jd_title(file)
         result['Skills_All'] = self.extract_skills(resume_text)
         primary_skill, secondry_skill = self.extract_primary_secondry_skill(file)
@@ -244,6 +251,7 @@ class jdParsar():
 if __name__ == "__main__":
     jdp = jdParsar()
     filename = sys.argv[1]
+    # filename = "/home/lid/Downloads/Job Description-20201121T112409Z-001/Job Description/Django Engineer_JD.docx"
     print(jdp.getparsedjd(filename))
 
 
