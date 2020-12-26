@@ -25,15 +25,15 @@ class matcher_bulk():
     def match_bulk(self,resume_ls,jd_ls):
         result_final=[]
         for resume in resume_ls:
-            try:
+            '''try:
                 resume = ast.literal_eval(resume)[0]
             except:
-                resume = ast.literal_eval(resume)
+                resume = ast.literal_eval(resume)'''
             for jd in jd_ls:
-                try:
+                '''try:
                     jd = ast.literal_eval(jd)[0]
                 except:
-                    jd = ast.literal_eval(jd)
+                    jd = ast.literal_eval(jd)'''
                 result = self.mt.get_similarity_overall(jd, resume, self.mt.skill_2_vec)
                 result_final.append(result)
         return result_final
