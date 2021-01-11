@@ -55,6 +55,11 @@ kubectl patch deployment uadyam \
 }'
 ```
 
+delete all
+```bash
+kubectl delete deploy/uadyam svc/uadyam ing/uadyam
+```
+
 Create Deployment:
 ```yaml
 kubectl apply -f - << EOF
@@ -91,6 +96,8 @@ Scale Deployment:
 ```bash
 kubectl scale deployment uadyam --replicas=3
 ```
+
+#### POD
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
