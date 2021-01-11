@@ -30,6 +30,7 @@ Push the docker image
 ```bash
 docker push shubhamtatvamasi/private:uadyam-1
 ```
+---
 
 ### Kubernetes
 
@@ -59,6 +60,7 @@ delete all
 ```bash
 kubectl delete deploy/uadyam svc/uadyam ing/uadyam
 ```
+---
 
 Create Deployment:
 ```yaml
