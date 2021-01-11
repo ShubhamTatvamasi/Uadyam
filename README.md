@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: uadyam
-        image: shubhamtatvamasi/private:uadyam-16
+        image: shubhamtatvamasi/private:uadyam-18
       imagePullSecrets:
       - name: docker-shubhamtatvamasi
 EOF
@@ -72,7 +72,7 @@ kubectl scale deployment uadyam --replicas=3
 
 Create a POD on k8s and expose it's service on NodePort 31001
 ```bash
-kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-17 --port=5000 --expose \
+kubectl run uadyam --image=shubhamtatvamasi/private:uadyam-18 --port=5000 --expose \
   --overrides='{
    "apiVersion":"v1",
    "spec":{
@@ -94,7 +94,7 @@ kubectl patch svc uadyam \
 
 Update the docker image
 ```bash
-kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-15
+kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-18
 ```
 
 Ingress deployment
