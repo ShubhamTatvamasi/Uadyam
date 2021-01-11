@@ -33,6 +33,28 @@ docker push shubhamtatvamasi/private:uadyam-1
 
 ### Kubernetes
 
+create deployment and service:
+```bash
+kubectl create deployment uadyam --image=shubhamtatvamasi/private:uadyam-18
+kubectl expose deployment uadyam --port=5000 --name=uadyam
+
+# update the image pull secret
+kubectl patch deployment uadyam \
+  --patch='{
+  "spec": {
+    "template": {
+      "spec": {
+        "imagePullSecrets":[
+          {
+            "name":"docker-shubhamtatvamasi"
+          }
+        ]
+      }
+    }
+  }
+}'
+```
+
 Create Deployment:
 ```yaml
 kubectl apply -f - << EOF
