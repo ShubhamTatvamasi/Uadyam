@@ -56,6 +56,30 @@ kubectl patch deployment uadyam \
 }'
 ```
 
+Ingress deployment
+```bash
+kubectl apply -f - << EOF
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: uadyam
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+  - hosts:
+      - uadyam.k8s.shubhamtatvamasi.com
+    secretName: letsencrypt-uadyam
+  rules:
+  - host: uadyam.k8s.shubhamtatvamasi.com
+    http:
+      paths:
+      - backend:
+          serviceName: uadyam
+          servicePort: 5000
+EOF
+```
+
 delete all
 ```bash
 kubectl delete deploy/uadyam svc/uadyam ing/uadyam
@@ -126,28 +150,6 @@ kubectl patch svc uadyam \
 Update the docker image
 ```bash
 kubectl set image po uadyam uadyam=shubhamtatvamasi/private:uadyam-18
-```
-
-Ingress deployment
-```bash
-kubectl apply -f - << EOF
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: uadyam
-spec:
-  tls:
-  - hosts:
-      - uadyam.k8s.shubhamtatvamasi.com
-    secretName: letsencrypt
-  rules:
-  - host: uadyam.k8s.shubhamtatvamasi.com
-    http:
-      paths:
-      - backend:
-          serviceName: uadyam
-          servicePort: 5000
-EOF
 ```
 
 Delete deployment
